@@ -24,8 +24,7 @@ export const ui = {
     aboutTitle: 'プロフィール',
     aboutDescription: '小説家・月島 凛（つきしま りん）のプロフィール。',
     navLabel: 'メインメニュー',
-    langSwitchLabel: 'English',
-    langSwitchShort: 'EN',
+    langGroupLabel: '言語',
     eyebrow: 'Novelist / 小説家',
     // TODO: キャッチコピー（作風をひとことで）
     catchcopy: '[キャッチコピー — 作風をひとことで。例：静けさの中にある、言葉にならない感情を書く。]',
@@ -51,8 +50,7 @@ export const ui = {
     aboutTitle: 'Profile',
     aboutDescription: 'About Rin Tsukishima, a Japanese novelist.',
     navLabel: 'Main menu',
-    langSwitchLabel: '日本語',
-    langSwitchShort: 'JA',
+    langGroupLabel: 'Language',
     eyebrow: 'Novelist',
     // TODO: Tagline in English
     catchcopy: '[Tagline in English — one line on what you write.]',

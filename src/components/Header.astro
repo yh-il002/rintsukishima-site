@@ -7,7 +7,7 @@ interface Props {
 }
 const { lang, alternates } = Astro.props;
 const ui = t(lang);
-const other = langs.find((l) => l !== lang)!;
+const langNames: Record<Lang, string> = { ja: '日本語', en: 'English' };
 ---
 
 <header class="container site-header">
@@ -20,9 +20,21 @@ const other = langs.find((l) => l !== lang)!;
   <nav aria-label={ui.navLabel}>
     <a href={path(lang, '/about/')}>Profile</a>
     <a href={`${path(lang)}#works`}>Works</a>
-    <a href={alternates[other]} hreflang={other} lang={other} aria-label={ui.langSwitchLabel} class="lang">
-      {ui.langSwitchShort}
-    </a>
+    <div class="lang-toggle" role="group" aria-label={ui.langGroupLabel}>
+      {
+        langs.map((l) =>
+          l === lang ? (
+            <span class="seg current" lang={l} aria-current="true" aria-label={langNames[l]}>
+              {l.toUpperCase()}
+            </span>
+          ) : (
+            <a class="seg" href={alternates[l]} hreflang={l} lang={l} aria-label={langNames[l]}>
+              {l.toUpperCase()}
+            </a>
+          ),
+        )
+      }
+    </div>
   </nav>
 </header>
 
@@ -50,10 +62,28 @@ const other = langs.find((l) => l !== lang)!;
     letter-spacing: 0.18em;
     text-transform: uppercase;
   }
-  nav a { padding: 12px 0; }
-  nav .lang {
-    padding-left: 32px;
-    border-left: 1px solid var(--line);
-    color: var(--mute);
+  nav {
+    align-items: center;
   }
+  nav > a { padding: 12px 0; }
+
+  /* 言語トグル：現在の言語を塗りつぶしで示す */
+  .lang-toggle {
+    display: inline-flex;
+    padding: 3px;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    letter-spacing: 0.12em;
+  }
+  .seg {
+    min-width: 44px;
+    padding: 6px 12px 6px calc(12px + 0.12em);
+    border-radius: 999px;
+    text-align: center;
+    line-height: 1;
+    color: var(--mute);
+    transition: background-color 0.2s, color 0.2s;
+  }
+  a.seg:hover { opacity: 1; color: var(--ink); background: #f2f2f2; }
+  .seg.current { background: var(--ink); color: var(--paper); }
 </style>
