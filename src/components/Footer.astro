@@ -1,0 +1,48 @@
+---
+import { socials } from '../i18n/ui';
+
+const year = new Date().getFullYear();
+---
+
+<footer>
+  <div class="container inner">
+    <p class="name mincho" lang="ja">月島 凛</p>
+    {
+      socials.length > 0 && (
+        <ul class="socials">
+          {socials.map((s) => (
+            <li>
+              <a href={s.url} rel="me noopener" target="_blank">{s.label}</a>
+            </li>
+          ))}
+        </ul>
+      )
+    }
+    <p class="copy" lang="en">© {year} Rin Tsukishima. All rights reserved.</p>
+  </div>
+</footer>
+
+<style>
+  footer { background: var(--ink); color: var(--paper); }
+  .inner {
+    padding-block: 72px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 24px 48px;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .name { font-size: 22px; letter-spacing: 0.3em; }
+  .socials {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    gap: 24px;
+    font-size: 14px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+  }
+  .socials a { display: inline-block; padding: 12px 0; }
+  .copy { font-size: 14px; letter-spacing: 0.2em; }
+</style>

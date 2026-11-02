@@ -1,0 +1,13 @@
+---
+import BookDetail from '../../../views/BookDetail.astro';
+import { getBooks, type Book } from '../../../lib/books';
+
+export async function getStaticPaths() {
+  const books = await getBooks();
+  return books.map((book) => ({ params: { slug: book.id }, props: { book } }));
+}
+
+const { book } = Astro.props as { book: Book };
+---
+
+<BookDetail book={book} lang="en" />

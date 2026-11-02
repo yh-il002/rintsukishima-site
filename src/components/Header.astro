@@ -1,0 +1,59 @@
+---
+import { path, t, langs, type Lang } from '../i18n/ui';
+
+interface Props {
+  lang: Lang;
+  alternates: Record<Lang, string>;
+}
+const { lang, alternates } = Astro.props;
+const ui = t(lang);
+const other = langs.find((l) => l !== lang)!;
+---
+
+<header class="container site-header">
+  <a href={path(lang)} class="logo">
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" aria-hidden="true"
+      ><path d="M20 14.5A8.5 8.5 0 1 1 9.5 4a7 7 0 0 0 10.5 10.5z"></path></svg
+    >
+    <span>Rin Tsukishima</span>
+  </a>
+  <nav aria-label={ui.navLabel}>
+    <a href={path(lang, '/about/')}>Profile</a>
+    <a href={`${path(lang)}#works`}>Works</a>
+    <a href={alternates[other]} hreflang={other} lang={other} aria-label={ui.langSwitchLabel} class="lang">
+      {ui.langSwitchShort}
+    </a>
+  </nav>
+</header>
+
+<style>
+  .site-header {
+    width: 100%;
+    padding-block: 32px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px 40px;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .logo {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 20px;
+    letter-spacing: 0.12em;
+  }
+  nav {
+    display: flex;
+    gap: 32px;
+    font-size: 15px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+  }
+  nav a { padding: 12px 0; }
+  nav .lang {
+    padding-left: 32px;
+    border-left: 1px solid var(--line);
+    color: var(--mute);
+  }
+</style>

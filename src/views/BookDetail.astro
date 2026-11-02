@@ -1,0 +1,108 @@
+---
+import { Image, getImage } from 'astro:assets';
+import Base from '../layouts/Base.astro';
+import AmazonLink from '../components/AmazonLink.astro';
+import { paragraphs, type Book } from '../lib/books';
+import { SITE_URL, path, personId, t, type Lang } from '../i18n/ui';
+
+interface Props {
+  book: Book;
+  lang: Lang;
+}
+const { book, lang } = Astro.props;
+const ui = t(lang);
+const ed = book.data[lang];
+const other: Lang = lang === 'ja' ? 'en' : 'ja';
+const otherEd = book.data[other];
+const alternates = { ja: `/books/${book.id}/`, en: `/en/books/${book.id}/` };
+
+const og = await getImage({ src: ed.cover, width: 800, format: 'jpg' });
+const description = paragraphs(ed.description)[0];
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Book',
+  name: ed.title,
+  author: { '@type': 'Person', '@id': personId, name: lang === 'ja' ? '月島 凛' : 'Rin Tsukishima' },
+  url: new URL(alternates[lang], SITE_URL).href,
+  image: new URL(og.src, SITE_URL).href,
+  inLanguage: lang,
+  bookFormat: 'https://schema.org/EBook',
+  genre: book.data.genre[lang],
+  description: ed.description.trim(),
+  datePublished: String(book.data.year),
+  [lang === 'ja' ? 'workTranslation' : 'translationOfWork']: {
+    '@type': 'Book',
+    name: otherEd.title,
+    inLanguage: other,
+    url: new URL(alternates[other], SITE_URL).href,
+  },
+  ...(ed.amazonUrl ? { sameAs: [ed.amazonUrl] } : {}),
+  ...(ed.asin ? { identifier: { '@type': 'PropertyValue', propertyID: 'ASIN', value: ed.asin } } : {}),
+};
+---
+
+<Base
+  lang={lang}
+  title={ed.title}
+  description={description}
+  alternates={alternates}
+  ogImage={og.src}
+  ogType="book"
+  jsonLd={jsonLd}
+>
+  <article class="section">
+    <div class="container book">
+      <div class="cover">
+        <Image
+          src={ed.cover}
+          alt={ed.title}
+          widths={[400, 600, 800, 1000]}
+          sizes="(max-width: 760px) 100vw, 420px"
+          loading="eager"
+        />
+      </div>
+      <div class="body">
+        <p class="kicker">{book.data.year} — {book.data.genre[lang]}</p>
+        <h1 class:list={[lang]}>{ed.title}</h1>
+        <p class="other-title" lang={other}>
+          <a href={alternates[other]} hreflang={other}>{otherEd.title}</a>
+          <span class="mute"> — {ui.otherLang}</span>
+        </p>
+        <div class="line" aria-hidden="true"></div>
+        <div class:list={['desc', lang]}>
+          {paragraphs(ed.description).map((p) => <p>{p}</p>)}
+        </div>
+        <AmazonLink lang={lang} url={ed.amazonUrl} />
+        <a class="back" href={`${path(lang)}#works`}>← {ui.backToWorks}</a>
+      </div>
+    </div>
+  </article>
+</Base>
+
+<style>
+  .book {
+    padding-top: 96px;
+    padding-bottom: 160px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 56px 96px;
+    align-items: flex-start;
+  }
+  .cover { flex: 1 1 300px; max-width: 420px; border: 1px solid var(--line); }
+  .body { flex: 2 1 420px; display: flex; flex-direction: column; gap: 16px; }
+  .kicker { font-size: 14px; letter-spacing: 0.2em; color: var(--mute); }
+  h1.ja { font-family: var(--mincho); font-weight: 500; font-size: clamp(26px, 3.4vw, 36px); line-height: 1.6; letter-spacing: 0.12em; }
+  h1.en { font-weight: 400; font-style: italic; font-size: clamp(36px, 5vw, 56px); line-height: 1.1; }
+  .other-title { font-size: 18px; font-style: italic; }
+  .other-title:lang(ja) { font-family: var(--mincho); font-style: normal; font-size: 15px; letter-spacing: 0.08em; }
+  .other-title .mute { font-family: var(--latin); font-style: normal; font-size: 14px; letter-spacing: 0.1em; }
+  .line { height: 1px; background: var(--line); margin-block: 16px; }
+  .desc { display: flex; flex-direction: column; gap: 1em; margin-bottom: 24px; }
+  .desc.ja { font-family: var(--mincho); font-size: 16px; line-height: 2.2; letter-spacing: 0.06em; }
+  .desc.en { font-size: 20px; line-height: 1.75; }
+  .back { margin-top: 32px; font-size: 15px; letter-spacing: 0.14em; color: var(--mute); padding-block: 12px; }
+  @media (max-width: 640px) {
+    .book { padding-top: 48px; padding-bottom: 112px; }
+  }
+</style>

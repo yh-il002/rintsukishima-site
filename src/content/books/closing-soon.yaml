@@ -1,0 +1,26 @@
+# 取り込み元: ../kindle-publishing/books/closing-soon/book.yaml, en/book.yaml
+year: 2026
+order: 1
+genre:
+  ja: 連作短編集
+  en: Linked stories
+ja:
+  title: 閉店まであと七日の和菓子屋さん
+  cover: ./closing-soon/cover-ja.jpg
+  description: |
+    商店街の端の豆大福屋「とがわ」のガラス戸には、十二年前から「閉店まであと七日」の貼り紙がある。誰も本気にしていなかったその数字が、長屋の取り壊しが決まったこの冬、初めて減りはじめた。
+    会社を辞める二十八歳。家族として娘に会う最後の日を迎える四十四歳。引っ越す親友と気まずいままの十七歳。母のいなくなった実家を二日で片づける六十七歳。そして、二十年あまりこの店の戸を開けられなかった男。何かを終わらせようとしている五人が、「最後だから」と豆大福を買いに来る。口数の少ない店主のハルは事情を聞かず、慰めもせず、ただ「で、いくつ？」と訊く。
+    一話ずつ主人公が替わる、五つの話の連作短編集。
+  # asin:
+  # amazonUrl:
+en:
+  title: Closing Soon at the Daifuku Shop
+  tentative: true
+  cover: ./closing-soon/cover-en.jpg
+  # TODO: 英語版 book.yaml の description が未記入のため、日本語版からの仮訳。確定版に差し替える
+  description: |
+    For twelve years, a sign on the glass door of Togawa, a tiny daifuku shop at the end of a shopping street, has read "Closing in seven days." Nobody took it seriously. But this winter, with the old row house scheduled for demolition, the number has finally started to go down.
+    A twenty-eight-year-old about to quit a job. A forty-four-year-old facing the last day of seeing a daughter as family. A seventeen-year-old still on awkward terms with a best friend who is moving away. A sixty-seven-year-old with two days to clear out a childhood home now that Mother is gone. And a man who has not been able to open the shop's door in more than twenty years. Five people, each trying to bring something to an end, come to buy daifuku "one last time." The taciturn owner, Haru, asks no questions and offers no comfort, and simply says, "So, how many?"
+    Five linked stories, each told by a different narrator.
+  # asin:
+  # amazonUrl:

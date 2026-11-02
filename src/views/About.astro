@@ -1,0 +1,74 @@
+---
+import Base from '../layouts/Base.astro';
+import { path, personJsonLd, socials, t, type Lang } from '../i18n/ui';
+
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const ui = t(lang);
+---
+
+<Base
+  lang={lang}
+  title={ui.aboutTitle}
+  description={ui.aboutDescription}
+  alternates={{ ja: '/about/', en: '/en/about/' }}
+  ogType="profile"
+  jsonLd={personJsonLd(lang)}
+>
+  <section class="section">
+    <div class="container profile">
+      <div class="section-head">
+        <h1 lang="en">Profile</h1>
+        {ui.profileSub && <p class="sub">{ui.profileSub}</p>}
+      </div>
+      <div class="body">
+        <p class="name mincho" lang="ja">月島 凛<span class="kana">つきしま りん</span></p>
+        <p class="name-en" lang="en">Rin Tsukishima</p>
+        <div class="line" aria-hidden="true"></div>
+        <p class:list={['bio', lang]}>{ui.bio}</p>
+        {
+          socials.length > 0 && (
+            <div class="links">
+              <h2>{ui.links}</h2>
+              <ul>
+                {socials.map((s) => (
+                  <li>
+                    <a href={s.url} rel="me noopener" target="_blank">{s.label}</a>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )
+        }
+        <a class="text-link" href={`${path(lang)}#works`}>{ui.backToWorks}</a>
+      </div>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .profile {
+    padding-top: 96px;
+    padding-bottom: 160px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 48px 96px;
+  }
+  .section-head { flex: 1 1 240px; }
+  .section-head h1 { font-size: 48px; font-weight: 400; font-style: italic; }
+  .body { flex: 2 1 480px; display: flex; flex-direction: column; gap: 20px; }
+  .name { font-weight: 500; font-size: 28px; letter-spacing: 0.2em; }
+  .kana { margin-left: 16px; font-size: 15px; font-weight: 400; letter-spacing: 0.3em; color: var(--mute); }
+  .name-en { font-size: 22px; font-style: italic; letter-spacing: 0.04em; color: var(--mute); }
+  .line { height: 1px; background: var(--line); margin-block: 20px; }
+  .bio.ja { font-family: var(--mincho); font-size: 16px; line-height: 2.2; letter-spacing: 0.06em; }
+  .bio.en { font-size: 20px; line-height: 1.75; }
+  .links { margin-top: 32px; display: flex; flex-direction: column; gap: 8px; }
+  .links h2 { font-size: 15px; font-weight: 400; letter-spacing: 0.24em; color: var(--mute); }
+  .links ul { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 0 32px; }
+  .links a { display: inline-block; padding: 12px 0; font-size: 18px; letter-spacing: 0.12em; }
+  .text-link { margin-top: 32px; }
+  @media (max-width: 640px) {
+    .profile { padding-top: 48px; padding-bottom: 112px; }
+  }
+</style>

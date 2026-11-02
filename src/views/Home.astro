@@ -1,0 +1,144 @@
+---
+import Base from '../layouts/Base.astro';
+import BookCard from '../components/BookCard.astro';
+import ArrowIcon from '../components/ArrowIcon.astro';
+import { getBooks } from '../lib/books';
+import { path, personJsonLd, t, type Lang } from '../i18n/ui';
+
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const ui = t(lang);
+const books = await getBooks();
+---
+
+<Base
+  lang={lang}
+  description={ui.homeDescription}
+  alternates={{ ja: '/', en: '/en/' }}
+  jsonLd={personJsonLd(lang)}
+>
+  <section id="top" class="container hero">
+    <div class="hero-text">
+      <p class="eyebrow">{ui.eyebrow}</p>
+      <h1 lang="en">Rin<br />Tsukishima</h1>
+      <div class="rule" aria-hidden="true"></div>
+      <p class:list={['catch', lang]}>{ui.catchcopy}</p>
+    </div>
+    <div class="hero-name" lang="ja" aria-hidden="true">
+      <p class="kana">つきしま　りん</p>
+      <p class="kanji">月島　凛</p>
+    </div>
+  </section>
+
+  <section id="profile" class="section">
+    <div class="container profile">
+      <div class="section-head">
+        <p class="num">01</p>
+        <h2 lang="en">Profile</h2>
+        {ui.profileSub && <p class="sub">{ui.profileSub}</p>}
+      </div>
+      <div class="profile-body">
+        <h3 class="mincho">
+          {lang === 'ja' ? '月島 凛' : 'Rin Tsukishima'}<span class="alt" lang={lang === 'ja' ? 'en' : 'ja'}
+            >{lang === 'ja' ? 'Rin Tsukishima' : '月島 凛'}</span
+          >
+        </h3>
+        <p class:list={['bio', lang]}>{ui.bio}</p>
+        <a class="text-link" href={path(lang, '/about/')}>{ui.readMore}<ArrowIcon /></a>
+      </div>
+    </div>
+  </section>
+
+  <section id="works" class="section">
+    <div class="container works">
+      <div class="works-head">
+        <div class="section-head">
+          <p class="num">02</p>
+          <h2 lang="en">Works</h2>
+          {ui.worksSub && <p class="sub">{ui.worksSub}</p>}
+        </div>
+        <p class="available">{ui.availableOn}</p>
+      </div>
+      <div class="grid">
+        {books.map((book) => <BookCard book={book} lang={lang} />)}
+      </div>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .hero {
+    padding-top: 96px;
+    padding-bottom: 160px;
+    display: flex;
+    flex-wrap: wrap-reverse;
+    gap: 64px;
+    align-items: flex-end;
+    justify-content: space-between;
+  }
+  .hero-text { flex: 1 1 420px; display: flex; flex-direction: column; gap: 28px; }
+  .eyebrow { font-size: 15px; letter-spacing: 0.32em; text-transform: uppercase; color: var(--mute); }
+  h1 {
+    font-size: clamp(56px, 9vw, 120px);
+    font-weight: 400;
+    font-style: italic;
+    line-height: 0.95;
+    letter-spacing: -0.01em;
+  }
+  .rule { width: 64px; height: 1px; background: var(--ink); }
+  .catch.ja { font-family: var(--mincho); font-size: 18px; line-height: 2.1; letter-spacing: 0.08em; }
+  .catch.en { font-size: 19px; font-style: italic; line-height: 1.6; color: var(--mute); }
+  .hero-name { flex: 0 0 auto; display: flex; gap: 28px; align-items: flex-start; padding-right: 8px; }
+  .hero-name p { writing-mode: vertical-rl; font-family: var(--mincho); }
+  .kana { font-size: 15px; letter-spacing: 0.5em; color: var(--mute); }
+  .kanji { font-weight: 500; font-size: clamp(64px, 8vw, 104px); letter-spacing: 0.24em; line-height: 1; }
+
+  .profile {
+    padding-block: 120px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 48px 96px;
+  }
+  .profile .section-head { flex: 1 1 240px; }
+  .profile-body { flex: 2 1 480px; display: flex; flex-direction: column; gap: 28px; }
+  .profile-body h3 { font-weight: 500; font-size: 28px; letter-spacing: 0.2em; }
+  .alt {
+    font-family: var(--latin);
+    font-weight: 400;
+    font-style: italic;
+    font-size: 20px;
+    letter-spacing: 0.04em;
+    margin-left: 16px;
+    color: var(--mute);
+  }
+  .alt:lang(ja) { font-family: var(--mincho); font-style: normal; font-size: 16px; letter-spacing: 0.2em; }
+  .bio.ja { font-family: var(--mincho); font-size: 16px; line-height: 2.2; letter-spacing: 0.06em; }
+  .bio.en { font-size: 20px; line-height: 1.75; }
+
+  .works {
+    padding-top: 120px;
+    padding-bottom: 160px;
+    display: flex;
+    flex-direction: column;
+    gap: 80px;
+  }
+  .works-head {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 24px;
+    align-items: flex-end;
+    justify-content: space-between;
+  }
+  .available { font-size: 15px; letter-spacing: 0.14em; color: var(--mute); }
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 72px 56px;
+  }
+
+  @media (max-width: 640px) {
+    .hero { padding-top: 48px; padding-bottom: 96px; }
+    .profile { padding-block: 80px; }
+    .works { padding-top: 80px; padding-bottom: 112px; gap: 56px; }
+  }
+</style>

@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://rintsukishima.com/sitemap-index.xml

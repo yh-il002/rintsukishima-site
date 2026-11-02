@@ -3,6 +3,13 @@
 作成日: 2026-11-02（kindle-publishing リポジトリでの相談内容をまとめたもの）
 更新日: 2026-11-02（アカウント作成・ドメイン取得・GitHub の所有確認まで完了。次は Astro サイトの作成）
 
+## 進捗メモ（2026-11-02 追記）
+
+- URL 構成は叩き台どおり（`/`・`/about/`・`/books/<slug>/` と `/en/` 配下）でユーザー承認済み
+- デザインは Claude Design のトップページ案（白黒・Cormorant Garamond＋しっぽり明朝）を元に実装。Works は実際の表紙画像を使う
+- Astro 7 のプロジェクト、`public/CNAME`、sitemap、robots.txt、JSON-LD（Person / Book）、OGP、deploy workflow まで作成済み
+- 未記入：キャッチコピー・プロフィール文（`src/i18n/ui.ts` の TODO）、英語版の作品紹介（仮訳）、ASIN・Amazon URL、Amazon 著者ページ、SNS
+
 ## 次のセッションでやること（ここから読む）
 
 **タスク：Astro プロジェクトを作り、GitHub Pages で `https://rintsukishima.com` として公開できる状態にする。**

@@ -1,0 +1,69 @@
+---
+import '../styles/global.css';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import { SITE_URL, t, type Lang } from '../i18n/ui';
+
+interface Props {
+  lang: Lang;
+  /** ページ固有のタイトル（未指定ならサイト名のみ） */
+  title?: string;
+  description: string;
+  /** 各言語版のパス（hreflang・言語切り替えに使う） */
+  alternates: Record<Lang, string>;
+  ogImage?: string;
+  ogType?: 'website' | 'book' | 'profile';
+  jsonLd?: object | object[];
+}
+
+const { lang, title, description, alternates, ogImage, ogType = 'website', jsonLd } = Astro.props;
+const ui = t(lang);
+const fullTitle = title ? `${title} | ${ui.siteName}` : ui.siteName;
+const canonical = new URL(Astro.url.pathname, SITE_URL).href;
+const abs = (p: string) => new URL(p, SITE_URL).href;
+const ogImageUrl = ogImage ? abs(ogImage) : undefined;
+---
+
+<!doctype html>
+<html lang={lang}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{fullTitle}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    <link rel="alternate" hreflang="ja" href={abs(alternates.ja)} />
+    <link rel="alternate" hreflang="en" href={abs(alternates.en)} />
+    <link rel="alternate" hreflang="x-default" href={abs(alternates.ja)} />
+    <link rel="sitemap" href="/sitemap-index.xml" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+
+    <meta property="og:type" content={ogType} />
+    <meta property="og:site_name" content={ui.siteName} />
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:locale" content={lang === 'ja' ? 'ja_JP' : 'en_US'} />
+    {ogImageUrl && <meta property="og:image" content={ogImageUrl} />}
+    <meta name="twitter:card" content={ogImageUrl ? 'summary_large_image' : 'summary'} />
+    <meta name="twitter:title" content={fullTitle} />
+    <meta name="twitter:description" content={description} />
+    {ogImageUrl && <meta name="twitter:image" content={ogImageUrl} />}
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@400;500;600&family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400&display=swap"
+    />
+
+    {jsonLd && <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />}
+  </head>
+  <body>
+    <Header lang={lang} alternates={alternates} />
+    <main>
+      <slot />
+    </main>
+    <Footer />
+  </body>
+</html>
